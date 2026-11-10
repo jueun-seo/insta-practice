@@ -1,7 +1,8 @@
-from fastapi import FastAPI, Request, Depends
+from fastapi import FastAPI, Request, Depends, Form
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session
+from fastapi.responses import RedirectResponse
 
 DB_URL = 'postgresql+psycopg://sd4:sd4@localhost:5432/insta_practice'
 engine = create_engine(DB_URL, echo=True)
@@ -31,3 +32,18 @@ def post_list(request: Request, db: Session = Depends(get_db)):
         name='list.html',
         context={'posts':posts}
     ) 
+
+@app.get('/posts/new')
+def post_new(request:Request):
+    return templates.TemplateResponse(
+        request=request,
+        name='new.html'
+    )
+
+@app.post('/posts/create')
+def post_create(content: str =Form(), db: Session =Depends(get_db)):
+    post = Post(content=content)
+    db.add(post)
+    db.commit()
+
+    return RedirectResponse('/posts', status_code=303)
