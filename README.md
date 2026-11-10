@@ -9,3 +9,7 @@ uv add "fastapi[standard]" sqlalchemy "psycopg[binary]" alembic
 ```
 uv run alembic init alembic
 ```
+# alembic upgrade
+```
+uv run alembic upgrade head
+```
