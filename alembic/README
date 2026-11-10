@@ -1,1 +1,6 @@
 Generic single-database configuration.
+
+-alembic revision
+```
+uv run alembic revision --autogenerate -m "create posts"
+```
